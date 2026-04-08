@@ -1,0 +1,14 @@
+<h2>Novo Produto</h2>
+
+<input placeholder="Nome" [(ngModel)]="produto.nome">
+<input placeholder="SKU" [(ngModel)]="produto.sku">
+<select [(ngModel)]="produto.categoria">
+  <option value="">Selecione uma categoria</option>
+  <option *ngFor="let c of categorias" [value]="c">
+    {{ c }}
+  </option>
+</select>
+<input type="number" placeholder="Preço" [(ngModel)]="produto.preco">
+<input type="number" placeholder="Estoque" [(ngModel)]="produto.quantidadeEstoque">
+
+<button (click)="salvar()">Salvar</button>

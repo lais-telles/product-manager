@@ -1,0 +1,30 @@
+# =========================
+# .NET (backend)
+# =========================
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+
+# =========================
+# Node / Angular (frontend)
+# =========================
+node_modules/
+.angular/
+dist/
+coverage/
+
+# =========================
+# Ambiente / IDE
+# =========================
+.vscode/
+.idea/
+*.swp
+
+# =========================
+# Sistema operacional
+# =========================
+.DS_Store
+Thumbs.db
