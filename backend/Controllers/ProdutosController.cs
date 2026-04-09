@@ -52,7 +52,7 @@ public class ProdutosController : ControllerBase
         try
         {
             await _service.Atualizar(id, dto);
-            return Ok("Atualizado com sucesso");
+            return NoContent();
         }
         catch (Exception ex)
         {

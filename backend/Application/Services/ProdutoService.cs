@@ -53,7 +53,8 @@ public class ProdutoService
             Id = produto.Id,
             Nome = produto.Nome,
             SKU = produto.SKU,
-            Preco = produto.Preco
+            Preco = produto.Preco,
+            QuantidadeEstoque = produto.QuantidadeEstoque
         };
     }
 
@@ -66,7 +67,9 @@ public class ProdutoService
             Id = p.Id,
             Nome = p.Nome,
             SKU = p.SKU,
-            Preco = p.Preco
+            Preco = p.Preco,
+            QuantidadeEstoque = p.QuantidadeEstoque,
+            Categoria = p.Categoria
         }).ToList();
     }
 
@@ -78,6 +81,12 @@ public class ProdutoService
     public async Task Atualizar(int id, ProdutoCreateDto dto)
     {
         var produto = await _repository.GetById(id);
+
+        if (dto.Categoria == "Eletrônicos" && dto.Preco < 50)
+        {
+            _logger.LogWarning("Preço inválido para eletrônicos");
+            throw new Exception("Produtos eletrônicos devem custar no mínimo R$ 50");
+        }
 
         if (produto == null)
             throw new Exception("Produto não encontrado");
