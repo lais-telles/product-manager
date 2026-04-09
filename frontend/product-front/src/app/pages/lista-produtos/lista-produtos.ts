@@ -1,25 +1,73 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ProdutoService } from '../../services/produto';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { FormProdutoComponent } from '../form-produto/form-produto';
 
 @Component({
   selector: 'app-lista-produtos',
   standalone: true,
-  imports: [CommonModule], 
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatButtonModule
+  ],
   templateUrl: './lista-produtos.html'
 })
 export class ListaProdutosComponent implements OnInit {
 
-  produtos: any[] = [];
+  produtos = new MatTableDataSource<any>();
 
-  constructor(private service: ProdutoService, private cdr: ChangeDetectorRef) { }
+  displayedColumns: string[] = [
+    'nome',
+    'preco',
+    'quantidadeEstoque',
+    'sku',
+    'acoes'
+  ];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  constructor(
+    private service: ProdutoService,
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit() {
     this.service.listar().subscribe((res: any) => {
-      this.produtos = res;
+      this.produtos.data = res;
 
-      this.cdr.detectChanges(); // 👈 FORÇA ATUALIZAÇÃO
+      setTimeout(() => {
+        this.produtos.paginator = this.paginator;
+      });
+
+      this.cdr.detectChanges();
+    });
+  }
+
+  abrirNovo() {
+    const dialogRef = this.dialog.open(FormProdutoComponent, {
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.ngOnInit();
+    });
+  }
+
+  editar(produto: any) {
+    const dialogRef = this.dialog.open(FormProdutoComponent, {
+      width: '500px',
+      data: produto
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.ngOnInit();
     });
   }
 
