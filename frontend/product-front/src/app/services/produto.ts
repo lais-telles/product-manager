@@ -18,6 +18,10 @@ export class ProdutoService {
     return this.http.post(this.api, produto);
   }
 
+  atualizar(id: number, produto: any) {
+    return this.http.put(`${this.api}/${id}`, produto);
+  }
+
   deletar(id: number) {
     return this.http.delete(`${this.api}/${id}`);
   }
